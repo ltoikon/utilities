@@ -11,6 +11,8 @@ File and line lengths are unspecified*/
 #include <string.h>
 #include <stddef.h>
 
+#define BUFFER 255
+
 int printLine(char *line){
 
     fprintf(stdout, "%s", line);
@@ -26,14 +28,13 @@ int readFile(FILE *pFile){
     while ((read = getline(&line, &len, pFile)) != -1 ){
         printLine(line);
     }
-    printf("\n"); //line break for last read line
     free(line);
     return 0;
 }
 
 FILE * openFile(FILE *pFile, char *filename){
     if ((pFile = fopen(filename, "r")) == NULL){
-        fprintf(stderr, "error: cannot open file '%s'\n", filename);
+        fprintf(stderr, "my-cat: cannot open file '%s'\n", filename);
         exit(1);
     }
     
@@ -42,9 +43,21 @@ FILE * openFile(FILE *pFile, char *filename){
 
 int main(int argc, char *argv[]){
     FILE *pFile = NULL;
-    char *filename = "my-cat.c";
-    pFile = openFile(pFile, filename);
-    readFile(pFile);
-    fclose(pFile);
+    char filename[BUFFER];
+    int i = 1;
+    printf("loopin ulkopuolella\n");
+    while(i <= (argc-1)){
+        printf("loopin sisällä\n");
+        strncpy(filename, argv[i], BUFFER);
+        printf("menossa aukaisemaan %s", filename);
+        pFile = openFile(pFile, filename);
+        readFile(pFile);
+        fclose(pFile);
+        i++;
+    }
     return 0;
 }
+
+/*TODO
+*Comments and documentation.
+*/
