@@ -65,7 +65,14 @@ int main(int argc, char *argv[]){
     char filename[BUFFER];
     char text[BUFFER];
     int i = 2;
+    
+    if (argc == 1){
+        fprintf(stderr, "my-grep: searchterm [file ...]\n");
+        exit(1);
+    }
+
     strncpy(text, argv[1], BUFFER);
+
     if (argc == 2){
         searchInput(text);
     }
