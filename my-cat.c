@@ -1,4 +1,4 @@
-/*Reverse*/
+/*My-cat*/
 /*Lauri Ikonen*/
 /*Started 11092024*/
 /*Modified 11092024*/
@@ -45,11 +45,8 @@ int main(int argc, char *argv[]){
     FILE *pFile = NULL;
     char filename[BUFFER];
     int i = 1;
-    printf("loopin ulkopuolella\n");
     while(i <= (argc-1)){
-        printf("loopin sisällä\n");
         strncpy(filename, argv[i], BUFFER);
-        printf("menossa aukaisemaan %s", filename);
         pFile = openFile(pFile, filename);
         readFile(pFile);
         fclose(pFile);
