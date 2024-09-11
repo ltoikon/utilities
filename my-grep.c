@@ -13,10 +13,27 @@ if such is found. File and line lengths are unspecified*/
 
 #define BUFFER 255
 
+
 int printLine(char *line){
 
     fprintf(stdout, "%s", line);
 
+    return 0;
+}
+
+int searchInput(char *text){
+    char *line = NULL;
+    size_t len = 0;
+    __ssize_t read;
+    //printf("Enter data (End with ctrl + D):\n");
+
+    while ((read = getline(&line, &len, stdin)) != -1 ){
+        if ((strstr(line, text)) != NULL){
+            printLine(line);
+        }
+    }
+        
+    free(line);
     return 0;
 }
 
@@ -49,15 +66,23 @@ int main(int argc, char *argv[]){
     char text[BUFFER];
     int i = 2;
     strncpy(text, argv[1], BUFFER);
-
-    while(i <= (argc-1)){
-        strncpy(filename, argv[i], BUFFER);
-        pFile = openFile(pFile, filename);
-        searchFile(pFile, text);
-        fclose(pFile);
-        i++;
+    if (argc == 2){
+        searchInput(text);
     }
 
+    else {
+        while (i <= (argc-1)){
+            strncpy(filename, argv[i], BUFFER);
+            pFile = openFile(pFile, filename);
+            searchFile(pFile, text);
+            fclose(pFile);
+            i++;
+        }
+    }
 
     return 0;
 }
+
+/*TODO
+* Comments and documentation
+ */
