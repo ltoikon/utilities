@@ -9,7 +9,6 @@ File and line lengths are unspecified*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stddef.h>
 
 #define BUFFER 255
 
@@ -20,18 +19,19 @@ int printLine(char *line){
     return 0;
 }
 
+//send text line by line to be printed by function printLine
 int readFile(FILE *pFile){
     char *line = NULL;
     size_t len = 0;
-    __ssize_t read;
 
-    while ((read = getline(&line, &len, pFile)) != -1 ){
+    while ((getline(&line, &len, pFile)) != -1 ){
         printLine(line);
     }
     free(line);
     return 0;
 }
 
+//return file pointer for a opened file include opening error check
 FILE * openFile(FILE *pFile, char *filename){
     if ((pFile = fopen(filename, "r")) == NULL){
         fprintf(stderr, "my-cat: cannot open file '%s'\n", filename);

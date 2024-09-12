@@ -8,7 +8,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stddef.h>
 
 #define BUFFER 255
 
@@ -16,7 +15,7 @@
 Thus, a compressed file will consist of some number of 5-byte entries, 
 each of which is comprised of a 4-byte integer (the run length) and the single character. */
 int compressLine(char *line){
-    int lineCount = 0;
+    int lineCount = 0; //position at a line
     int charCount;
     int len = strlen(line);
 
@@ -31,21 +30,18 @@ int compressLine(char *line){
         fwrite(&charCount, sizeof(int), 1, stdout);
         fwrite(&line[lineCount], sizeof(char), 1, stdout);
         
-        //Debugging, shows charCount integer ascii mode instead of binary
-        //printf("%d%c",charCount, line[lineCount]);
-        
         /*Move line counter forward according 'same characters' counter*/
         lineCount += charCount;
     }
     return 0;
 }
 
+//handle file reading and sends lines for compressLine function to be compressed and printed
 int compressFile(FILE *pFile){
     char *line = NULL;
     size_t len = 0;
-    __ssize_t read;
 
-    while ((read = getline(&line, &len, pFile)) != -1 ){
+    while ((getline(&line, &len, pFile)) != -1 ){
         compressLine(line);
     }
     free(line);

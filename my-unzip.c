@@ -8,29 +8,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stddef.h>
 
 #define BUFFER 255
 
-
-int uncompressLine(char *line){
-
-    return 0;
-}
-
 int uncompressFile(FILE *pFile){
-    char *line = NULL;
-
     int runLength = 0;
     char bufferChar;
 
+    /*read each 5 byte unit in a file, 
+    first read 4 byte integer (how many times character is repeated) 
+    and then 1 byte character */
     while ((fread(&runLength, sizeof(int), 1, pFile)) == 1 ){
         fread(&bufferChar, sizeof(char), 1, pFile);
+
+        //printing character multiple times according rle value
         for (int i = 0; i < runLength; i++){
             printf("%c",bufferChar);
         }
     }
-    free(line);
     return 0;
 }
 

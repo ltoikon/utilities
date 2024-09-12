@@ -9,7 +9,6 @@ if such is found. File and line lengths are unspecified*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stddef.h>
 
 #define BUFFER 255
 
@@ -24,10 +23,11 @@ int printLine(char *line){
 int searchInput(char *text){
     char *line = NULL;
     size_t len = 0;
-    __ssize_t read;
+
+    //instruction
     //printf("Enter data (End with ctrl + D):\n");
 
-    while ((read = getline(&line, &len, stdin)) != -1 ){
+    while ((getline(&line, &len, stdin)) != -1 ){
         if ((strstr(line, text)) != NULL){
             printLine(line);
         }
@@ -37,6 +37,7 @@ int searchInput(char *text){
     return 0;
 }
 
+//searches matching lines using strstr function and go through file line by line
 int searchFile(FILE *pFile, char *text){
     char *line = NULL;
     size_t len = 0;
