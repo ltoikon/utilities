@@ -1,21 +1,17 @@
 /*My-cat*/
 /*Lauri Ikonen*/
 /*Started 11092024*/
-/*Modified 11092024*/
+/*Modified 03122024*/
 
 /*Program reads a file and prints contents of the file line by line on stdout.
 File and line lengths are unspecified*/
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-
-#define BUFFER 255
+#include <string.h> 
 
 int printLine(char *line){
-
     fprintf(stdout, "%s", line);
-
     return 0;
 }
 
@@ -43,18 +39,22 @@ FILE * openFile(FILE *pFile, char *filename){
 
 int main(int argc, char *argv[]){
     FILE *pFile = NULL;
-    char filename[BUFFER];
+    char *filename = NULL;
     int i = 1;
+
+    //going through all files
     while(i <= (argc-1)){
-        strncpy(filename, argv[i], BUFFER);
+        if ((filename = malloc(sizeof(char)*(strlen(argv[i])+1))) == NULL){
+            fprintf(stderr, "my-cat: malloc failed\n");
+            exit(1);
+        }
+        strcpy(filename, argv[1]);
         pFile = openFile(pFile, filename);
         readFile(pFile);
         fclose(pFile);
+        free(filename);
         i++;
     }
     return 0;
 }
 
-/*TODO
-*Comments and documentation.
-*/

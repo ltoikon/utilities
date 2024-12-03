@@ -1,15 +1,13 @@
 /*My-unzip*/
 /*Lauri Ikonen*/
 /*Started 11092024*/
-/*Modified 11092024*/
+/*Modified 03122024*/
 
 /*Program uncompress a RLE compressed file (run length encryption). */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#define BUFFER 255
 
 int uncompressFile(FILE *pFile){
     int runLength = 0;
@@ -29,6 +27,7 @@ int uncompressFile(FILE *pFile){
     return 0;
 }
 
+//return file pointer for a opened file include opening error check
 FILE * openFile(FILE *pFile, char *filename){
     if ((pFile = fopen(filename, "r")) == NULL){
         fprintf(stderr, "my-zip: cannot open file '%s'\n", filename);
@@ -40,13 +39,19 @@ FILE * openFile(FILE *pFile, char *filename){
 
 int main(int argc, char *argv[]){
     FILE *pFile = NULL;
-    char filename[BUFFER];
+    char *filename = NULL;
     int i = 1;
+    //going through all files
     while(i <= (argc-1)){
-        strncpy(filename, argv[i], BUFFER);
+        if ((filename = malloc(sizeof(char)*(strlen(argv[i])+1))) == NULL){
+            fprintf(stderr, "my-unzip: malloc failed\n");
+            exit(1);
+        }
+        strcpy(filename, argv[i]);
         pFile = openFile(pFile, filename);
         uncompressFile(pFile);
         fclose(pFile);
+        free(filename);
         i++;
     }
 

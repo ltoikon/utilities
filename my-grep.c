@@ -1,7 +1,7 @@
 /*My-grep*/
 /*Lauri Ikonen*/
 /*Started 11092024*/
-/*Modified 11092024*/
+/*Modified 03122024*/
 
 /*Program searches a string from a file and prints the matchin line on stdout 
 if such is found. File and line lengths are unspecified*/
@@ -10,16 +10,13 @@ if such is found. File and line lengths are unspecified*/
 #include <stdlib.h>
 #include <string.h>
 
-#define BUFFER 255
-
-
 int printLine(char *line){
-
     fprintf(stdout, "%s", line);
-
     return 0;
 }
 
+//INPUT MODE 
+//searching matching lines using strstr function and go through input line by line
 int searchInput(char *text){
     char *line = NULL;
     size_t len = 0;
@@ -37,7 +34,8 @@ int searchInput(char *text){
     return 0;
 }
 
-//searches matching lines using strstr function and go through file line by line
+//FILE MODE 
+//searching matching lines using strstr function and go through file line by line
 int searchFile(FILE *pFile, char *text){
     char *line = NULL;
     size_t len = 0;
@@ -52,6 +50,7 @@ int searchFile(FILE *pFile, char *text){
     return 0;
 }
 
+//return file pointer for a opened file include opening error check
 FILE * openFile(FILE *pFile, char *filename){
     if ((pFile = fopen(filename, "r")) == NULL){
         fprintf(stderr, "my-grep: cannot open file '%s'\n", filename);
@@ -63,34 +62,45 @@ FILE * openFile(FILE *pFile, char *filename){
 
 int main(int argc, char *argv[]){
     FILE *pFile = NULL;
-    char filename[BUFFER];
-    char text[BUFFER];
+    char *filename = NULL;
+    char *text = NULL;
     int i = 2;
     
+    //too few parameters
     if (argc == 1){
         fprintf(stderr, "my-grep: searchterm [file ...]\n");
         exit(1);
     }
 
-    strncpy(text, argv[1], BUFFER);
+    //saving the search term to a variable
+    if ((text = malloc(sizeof(char)*(strlen(argv[1])+1))) == NULL){
+        fprintf(stderr, "my-grep: malloc failed\n");
+        exit(1);
+    }
+    strcpy(text, argv[1]);
 
+    //console input mode
     if (argc == 2){
         searchInput(text);
-    }
-
+    } 
+    
+    //file input mode
     else {
+        //going through all files
         while (i <= (argc-1)){
-            strncpy(filename, argv[i], BUFFER);
+            if ((filename = malloc(sizeof(char)*(strlen(argv[i])+1))) == NULL){
+                fprintf(stderr, "my-grep: malloc failed\n");
+                exit(1);
+            }
+            strcpy(filename, argv[i]);
             pFile = openFile(pFile, filename);
             searchFile(pFile, text);
             fclose(pFile);
+            free(filename);
             i++;
         }
     }
-
+    free(text);
     return 0;
 }
 
-/*TODO
-* Comments and documentation
- */
