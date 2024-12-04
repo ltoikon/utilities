@@ -1,7 +1,7 @@
 /*My-cat*/
 /*Lauri Ikonen*/
 /*Started 11092024*/
-/*Modified 03122024*/
+/*Modified 04122024*/
 
 /*Program reads a file and prints contents of the file line by line on stdout.
 File and line lengths are unspecified*/
@@ -48,7 +48,7 @@ int main(int argc, char *argv[]){
             fprintf(stderr, "my-cat: malloc failed\n");
             exit(1);
         }
-        strcpy(filename, argv[1]);
+        strcpy(filename, argv[i]);
         pFile = openFile(pFile, filename);
         readFile(pFile);
         fclose(pFile);
