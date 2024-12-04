@@ -31,6 +31,7 @@ int uncompressFile(FILE *pFile){
 FILE * openFile(FILE *pFile, char *filename){
     if ((pFile = fopen(filename, "r")) == NULL){
         fprintf(stderr, "my-zip: cannot open file '%s'\n", filename);
+        free(filename);
         exit(1);
     }
     
